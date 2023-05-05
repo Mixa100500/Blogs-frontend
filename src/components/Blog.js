@@ -3,17 +3,14 @@ import PropTypes from 'prop-types'
 
 const Blog = ({
   blog,
-  updateBlog,
-  user,
+  like,
+  own,
   handleDeleteBlog
 }) => {
-  const [blogVisible, setBlogVisible] = useState(false)
-
-  const hideWhenVisible = { display: blogVisible ? 'none' : '' }
-  const showWhenVisible = { display: blogVisible ? '' : 'none' }
+  const [visible, setVisible] = useState(false)
 
   const toggleVisibility = () => {
-    setBlogVisible(!blogVisible)
+    setVisible(!visible)
   }
 
   const blogStyle = {
@@ -26,10 +23,7 @@ const Blog = ({
 
   const addLikes = (event) => {
     event.preventDefault()
-    updateBlog({
-      ...blog,
-      likes: blog.likes + 1
-    })
+    like(blog)
   }
 
   const deleteBlog = () => {
@@ -38,40 +32,43 @@ const Blog = ({
   }
 
   let showWhenYour = { display: 'none' }
-  if (user) {
-    showWhenYour = { display: blog.user.username === user.username ? '' : 'none' }
+  if (own) {
+    showWhenYour = { display: '' }
   }
 
   return (
     <div className='blog' style={blogStyle}>
-      <div style={hideWhenVisible} className='previewBlog'>
-        {blog.title} {blog.author}
-        <button onClick={toggleVisibility}>view</button>
-      </div>
-      <div style={showWhenVisible} className='blogContent'>
-        <div>
-          {blog.title}
-          <button onClick={toggleVisibility}>hide</button>
+      {!visible && (<div className='previewBlog'>
+        <span>{blog.title} {blog.author}</span>
+        <button onClick={toggleVisibility}>{visible ? 'hide' : 'view'}</button>
+      </div>)}
+      {visible && (
+        <div className='blogContent'>
+          <div>
+            <span>{blog.title}</span>
+            <button onClick={toggleVisibility}>hide</button>
+          </div>
+          <div><a href={blog.url}>{blog.url}</a></div>
+          <div>
+            <span>likes {blog.likes}</span>
+            <button style={showWhenYour} onClick={addLikes} className='buttonLike'>like</button>
+          </div>
+          <div>{blog.author}</div>
+          <button
+            style={showWhenYour}
+            onClick={deleteBlog}
+          >
+            delete
+          </button>
         </div>
-        <div><a href={blog.url}>{blog.url}</a></div>
-        <div>likes {blog.likes}
-          <button onClick={addLikes} className='buttonLike'>like</button>
-        </div>
-        <div>{blog.author}</div>
-        <button
-          style={showWhenYour}
-          onClick={deleteBlog}
-        >
-          delete
-        </button>
-      </div>
+      )}
     </div>
   )
 }
 
 Blog.propTypes = {
   blog: PropTypes.object.isRequired,
-  updateBlog: PropTypes.func.isRequired,
+  like: PropTypes.func.isRequired,
   user: PropTypes.object.isRequired,
   handleDeleteBlog: PropTypes.func.isRequired
 }

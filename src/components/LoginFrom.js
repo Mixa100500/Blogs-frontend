@@ -1,25 +1,23 @@
 import PropTypes from 'prop-types'
-import Notification from './Notification'
+import { useState } from 'react'
 
-const LoginForm = ({
-  handleSumbit,
-  handleUsernameChange,
-  handlePasswordChange,
-  username,
-  password,
-  info
-}) => {
+const LoginForm = ({ login }) => {
+  const [password, setPassword] = useState('')
+  const [username, setUsername] = useState('')
+  const handleSumbit = (event) => {
+    event.preventDefault()
+
+    login({ password, username })
+  }
 
   return (
     <form id='loginForm' onSubmit={handleSumbit}>
-      <h2>Log in to application</h2>
-      <Notification info={info}/>
       <div>
         username
         <input
           id='username'
           value={username}
-          onChange={handleUsernameChange}
+          onChange={({ target }) => setUsername(target.value)}
         />
       </div>
       <div>
@@ -27,7 +25,7 @@ const LoginForm = ({
         <input
           id='password'
           value={password}
-          onChange={handlePasswordChange}
+          onChange={({ target }) => setPassword(target.value)}
         />
         <button type='submit' id='login-button'>
           login
