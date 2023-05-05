@@ -69,7 +69,7 @@ const Blog = ({
 Blog.propTypes = {
   blog: PropTypes.object.isRequired,
   like: PropTypes.func.isRequired,
-  user: PropTypes.object.isRequired,
+  own: PropTypes.bool.isRequired,
   handleDeleteBlog: PropTypes.func.isRequired
 }
 

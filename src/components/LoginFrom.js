@@ -36,7 +36,7 @@ const LoginForm = ({ login }) => {
 }
 
 LoginForm.propTypes = {
-  handleSumbit: PropTypes.func.isRequired
+  login: PropTypes.func.isRequired
 }
 
 export default LoginForm
